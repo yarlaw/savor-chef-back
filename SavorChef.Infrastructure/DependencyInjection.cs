@@ -1,5 +1,3 @@
-using SavorChef.Domain.Constants;
-// using SavorChef.Infrastructure.Data.Interceptors;
 using SavorChef.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,13 +19,13 @@ public static class DependencyInjection
         // builder.Services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         // builder.Services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
-        builder.Services.AddDbContext<ApplicationDataContext>((sp, options) =>
+        builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
             options.UseNpgsql(connectionString).AddAsyncSeeding(sp);
         });
         
-        builder.Services.AddScoped<IApplicationDataContext>(provider => provider.GetRequiredService<ApplicationDataContext>());
+        builder.Services.AddScoped<IApplicationDataContext>(provider => provider.GetRequiredService<IApplicationDataContext>());
 
         builder.Services.AddScoped<ApplicationDataContextInitialiser>();
         
@@ -39,13 +37,10 @@ public static class DependencyInjection
         builder.Services
             .AddIdentityCore<ApplicationUser>()
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDataContext>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddApiEndpoints();
 
         builder.Services.AddSingleton(TimeProvider.System);
         builder.Services.AddTransient<IIdentityService, IdentityService>();
-
-        builder.Services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
     }
 }

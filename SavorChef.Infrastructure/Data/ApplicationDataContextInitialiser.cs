@@ -33,11 +33,11 @@ public static class InitialiserExtensions
 public class ApplicationDataContextInitialiser
 {
     private readonly ILogger<ApplicationDataContextInitialiser> _logger;
-    private readonly ApplicationDataContext _context;
+    private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
-    public ApplicationDataContextInitialiser(ILogger<ApplicationDataContextInitialiser> logger, ApplicationDataContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public ApplicationDataContextInitialiser(ILogger<ApplicationDataContextInitialiser> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _logger = logger;
         _context = context;

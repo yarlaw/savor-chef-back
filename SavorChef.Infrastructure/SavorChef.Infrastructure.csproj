@@ -32,11 +32,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageVersion Update="Ardalis.GuardClauses" Version="5.0.0" />
+      <PackageVersion Update="Ardalis.GuardClauses"/>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Interceptors\" />
-    </ItemGroup>
-
 </Project>

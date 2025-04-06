@@ -10,7 +10,7 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse>(ILogger<TRequest> 
     {
         try
         {
-            return await next(cancellationToken);
+            return await next();
         }
         catch (Exception ex)
         {
