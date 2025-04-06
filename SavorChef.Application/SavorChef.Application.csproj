@@ -7,23 +7,40 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-      <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.13" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Microsoft.IdentityModel.Tokens">
-        <HintPath>..\..\..\..\.nuget\packages\microsoft.identitymodel.tokens\6.28.0\lib\net6.0\Microsoft.IdentityModel.Tokens.dll</HintPath>
-      </Reference>
-      <Reference Include="System.IdentityModel.Tokens.Jwt">
-        <HintPath>..\..\..\..\.nuget\packages\system.identitymodel.tokens.jwt\6.28.0\lib\net6.0\System.IdentityModel.Tokens.Jwt.dll</HintPath>
-      </Reference>
+        <PackageReference Include="Ardalis.GuardClauses" />
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\SavorChef.Domain\SavorChef.Domain.csproj" />
-      <ProjectReference Include="..\SavorChef.Infrastructure\SavorChef.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="AutoMapper">
+        <HintPath>..\..\..\..\.nuget\packages\automapper\12.0.1\lib\netstandard2.1\AutoMapper.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.IdentityModel.Tokens">
+        <HintPath>..\..\..\..\.nuget\packages\microsoft.identitymodel.tokens\7.0.3\lib\net8.0\Microsoft.IdentityModel.Tokens.dll</HintPath>
+      </Reference>
+      <Reference Include="System.IdentityModel.Tokens.Jwt">
+        <HintPath>..\..\..\..\.nuget\packages\system.identitymodel.tokens.jwt\7.0.3\lib\net8.0\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageVersion Update="AutoMapper" Version="14.0.0" />
+      <PackageVersion Update="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+      <PackageVersion Update="Ardalis.GuardClauses" Version="4.6.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Recipes\Commands\" />
+      <Folder Include="Recipes\EventHandlers\" />
+      <Folder Include="Recipes\Queries\" />
     </ItemGroup>
 
 </Project>

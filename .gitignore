@@ -38,3 +38,5 @@ Desktop.ini
 appsettings.**.json
 
 .idea
+
+SavorChef.Api/appsettings.json

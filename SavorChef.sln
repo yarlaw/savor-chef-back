@@ -1,6 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorChef.Api", "SavorChef.Api\SavorChef.Api.csproj", "{69A1F1BA-0C47-4A9C-8279-B31CD4D0FB50}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B5AC994F-3D0B-4CE9-A045-7A9BA208B41F} = {B5AC994F-3D0B-4CE9-A045-7A9BA208B41F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SavorChef.Infrastructure", "SavorChef.Infrastructure\SavorChef.Infrastructure.csproj", "{086D21A4-7F90-4CB9-9F69-46C7934AF378}"
 EndProject

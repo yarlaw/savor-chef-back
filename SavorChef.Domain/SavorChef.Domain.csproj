@@ -7,13 +7,19 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="MediatR" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Reference Include="Microsoft.EntityFrameworkCore">
-        <HintPath>..\..\..\..\.nuget\packages\microsoft.entityframeworkcore\6.0.16\lib\net6.0\Microsoft.EntityFrameworkCore.dll</HintPath>
+        <HintPath>..\..\..\..\.nuget\packages\microsoft.entityframeworkcore\8.0.13\lib\net8.0\Microsoft.EntityFrameworkCore.dll</HintPath>
       </Reference>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.13" />
+      <Folder Include="Exceptions\" />
+      <Folder Include="ValueObjects\" />
     </ItemGroup>
-
 </Project>
