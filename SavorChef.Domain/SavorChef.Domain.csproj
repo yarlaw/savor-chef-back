@@ -1,26 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>SavorChef.Domain</RootNamespace>
+    <AssemblyName>SavorChef.Domain</AssemblyName>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="MediatR" />
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <Reference Include="Microsoft.EntityFrameworkCore">
-        <HintPath>..\..\..\..\.nuget\packages\microsoft.entityframeworkcore\8.0.13\lib\net8.0\Microsoft.EntityFrameworkCore.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Exceptions\" />
-      <Folder Include="ValueObjects\" />
-    </ItemGroup>
 </Project>
