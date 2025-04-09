@@ -10,13 +10,6 @@ namespace SavorChef.Infrastructure.Data;
 
 public static class InitializerExtensions
 {
-    public static async Task AddAsyncSeeding(this DbContextOptionsBuilder builder, IServiceProvider serviceProvider)
-    {
-        using var scope = serviceProvider.CreateScope();
-        var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDataContextInitializer>();
-        await initialiser.SeedAsync();
-    }
-
     public static async Task InitialiseDatabaseAsync(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
@@ -24,6 +17,8 @@ public static class InitializerExtensions
         var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDataContextInitializer>();
 
         await initialiser.InitialiseAsync();
+
+        await initialiser.SeedAsync();
     }
 }
 

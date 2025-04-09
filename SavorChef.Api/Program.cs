@@ -18,9 +18,7 @@ else
     app.UseHsts();
 }
 
-#if (!UseAspire)
-app.UseHealthChecks("/health");
-#endif
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -36,5 +34,3 @@ app.Map("/", () => Results.Redirect("/api"));
 app.MapEndpoints();
 
 app.Run();
-
-public partial class Program { }
