@@ -8,36 +8,33 @@ using SavorChef.Infrastructure.Identity;
 
 namespace SavorChef.Infrastructure.Data;
 
-public static class InitialiserExtensions
+public static class InitializerExtensions
 {
-    public static void AddAsyncSeeding(this DbContextOptionsBuilder builder, IServiceProvider serviceProvider)
+    public static async Task AddAsyncSeeding(this DbContextOptionsBuilder builder, IServiceProvider serviceProvider)
     {
-        builder.UseAsyncSeeding(async (context, _, ct) =>
-        {
-            var initialiser = serviceProvider.GetRequiredService<ApplicationDataContextInitialiser>();
-
-            await initialiser.SeedAsync();
-        });
+        using var scope = serviceProvider.CreateScope();
+        var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDataContextInitializer>();
+        await initialiser.SeedAsync();
     }
 
     public static async Task InitialiseDatabaseAsync(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
 
-        var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDataContextInitialiser>();
+        var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDataContextInitializer>();
 
         await initialiser.InitialiseAsync();
     }
 }
 
-public class ApplicationDataContextInitialiser
+public class ApplicationDataContextInitializer
 {
-    private readonly ILogger<ApplicationDataContextInitialiser> _logger;
+    private readonly ILogger<ApplicationDataContextInitializer> _logger;
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
-    public ApplicationDataContextInitialiser(ILogger<ApplicationDataContextInitialiser> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public ApplicationDataContextInitializer(ILogger<ApplicationDataContextInitializer> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _logger = logger;
         _context = context;

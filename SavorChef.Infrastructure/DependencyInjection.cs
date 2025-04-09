@@ -27,7 +27,7 @@ public static class DependencyInjection
         
         builder.Services.AddScoped<IApplicationDataContext>(provider => provider.GetRequiredService<IApplicationDataContext>());
 
-        builder.Services.AddScoped<ApplicationDataContextInitialiser>();
+        builder.Services.AddScoped<ApplicationDataContextInitializer>();
         
         builder.Services.AddAuthentication()
             .AddBearerToken(IdentityConstants.BearerScheme);
