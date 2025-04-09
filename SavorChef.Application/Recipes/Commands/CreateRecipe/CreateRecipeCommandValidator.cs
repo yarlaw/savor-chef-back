@@ -29,8 +29,5 @@ public class CreateRecipeCommandValidator : AbstractValidator<CreateRecipeComman
         RuleFor(x => x.DishCategory)
             .NotEmpty()
             .MaximumLength(100);
-
-        RuleFor(x => x.CreatorId)
-            .GreaterThan(0);
     }
 }

@@ -2,7 +2,6 @@ using SavorChef.Application.Common.Interfaces;
 using SavorChef.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using SavorChef.Api.Infrastructure;
-using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 
 using NSwag;
 using NSwag.Generation.Processors.Security;

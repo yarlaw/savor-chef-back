@@ -19,7 +19,7 @@ public class CreateRecipeCommand : IRequest<int>
 
     public string DishCategory { get; set; } = string.Empty;
 
-    public int CreatorId { get; set; }
+    public string CreatorId { get; set; } = string.Empty;
 }
 
 public class CreateRecipeCommandHandler : IRequestHandler<CreateRecipeCommand, int>

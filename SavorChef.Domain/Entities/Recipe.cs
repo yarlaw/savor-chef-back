@@ -16,6 +16,6 @@ public class Recipe : BaseAuditableEntity
     public string DishCategory { get; set; } = string.Empty;
 
     [Required]
-    public int CreatorId { get; set; }
+    public string CreatorId { get; set; } = string.Empty;
 }
 
