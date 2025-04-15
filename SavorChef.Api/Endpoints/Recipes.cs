@@ -13,8 +13,8 @@ public class Recipes: EndpointGroupBase
             .RequireAuthorization()
             .MapPost(CreateRecipe);
     }
-    
-    async Task<Created<int>> CreateRecipe(ISender sender, CreateRecipeCommand command)
+
+    private static async Task<Created<int>> CreateRecipe(ISender sender, CreateRecipeCommand command)
     {
         var id = await sender.Send(command);
 

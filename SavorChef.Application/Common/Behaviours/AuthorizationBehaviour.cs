@@ -31,32 +31,32 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
         }
 
         // Role-based authorization
-        var authorizeAttributesWithRoles = attributes.Where(a => !string.IsNullOrWhiteSpace(a.Roles));
-        var attributesWithRoles = authorizeAttributesWithRoles.ToList();
-        
-        if (attributesWithRoles.Count != 0)
-        {
-            var authorized = false;
-
-            foreach (var roles in attributesWithRoles.Select(a => a.Roles.Split(',')))
-            {
-                foreach (var role in roles)
-                {
-                    var isInRole = await _identityService.IsInRoleAsync(_user.Id, role.Trim());
-                    if (isInRole)
-                    {
-                        authorized = true;
-                        break;
-                    }
-                }
-            }
-
-            // Must be a member of at least one role in roles
-            if (!authorized)
-            {
-                throw new ForbiddenAccessException();
-            }
-        }
+        // var authorizeAttributesWithRoles = attributes.Where(a => !string.IsNullOrWhiteSpace(a.Roles));
+        // var attributesWithRoles = authorizeAttributesWithRoles.ToList();
+        //
+        // if (attributesWithRoles.Count != 0)
+        // {
+        //     var authorized = false;
+        //
+        //     foreach (var roles in attributesWithRoles.Select(a => a.Roles.Split(',')))
+        //     {
+        //         foreach (var role in roles)
+        //         {
+        //             var isInRole = await _identityService.IsInRoleAsync(_user.Id, role.Trim());
+        //             if (isInRole)
+        //             {
+        //                 authorized = true;
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //
+        //     // Must be a member of at least one role in roles
+        //     if (!authorized)
+        //     {
+        //         throw new ForbiddenAccessException();
+        //     }
+        // }
 
         // User is authorized / authorization not required
         return await next();

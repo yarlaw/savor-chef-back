@@ -27,14 +27,14 @@ public class ApplicationDataContextInitializer
     private readonly ILogger<ApplicationDataContextInitializer> _logger;
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    // private readonly RoleManager<IdentityRole> _roleManager;
 
     public ApplicationDataContextInitializer(ILogger<ApplicationDataContextInitializer> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _logger = logger;
         _context = context;
         _userManager = userManager;
-        _roleManager = roleManager;
+        // _roleManager = roleManager;
     }
 
     public async Task InitialiseAsync()
@@ -66,24 +66,24 @@ public class ApplicationDataContextInitializer
     public async Task TrySeedAsync()
     {
         // Default roles
-        var administratorRole = new IdentityRole(Roles.Administrator);
-
-        if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
-        {
-            await _roleManager.CreateAsync(administratorRole);
-        }
-
-        // Default users
-        var administrator = new ApplicationUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
-
-        if (_userManager.Users.All(u => u.UserName != administrator.UserName))
-        {
-            await _userManager.CreateAsync(administrator, "Administrator1!");
-            if (!string.IsNullOrWhiteSpace(administratorRole.Name))
-            {
-                await _userManager.AddToRolesAsync(administrator, new [] { administratorRole.Name });
-            }
-        }
+        // var administratorRole = new IdentityRole(Roles.Administrator);
+        //
+        // if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
+        // {
+        //     await _roleManager.CreateAsync(administratorRole);
+        // }
+        //
+        // // Default users
+        // var administrator = new ApplicationUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
+        //
+        // if (_userManager.Users.All(u => u.UserName != administrator.UserName))
+        // {
+        //     await _userManager.CreateAsync(administrator, "Administrator1!");
+        //     if (!string.IsNullOrWhiteSpace(administratorRole.Name))
+        //     {
+        //         await _userManager.AddToRolesAsync(administrator, new [] { administratorRole.Name });
+        //     }
+        // }
 
         await _context.SaveChangesAsync();
         }
