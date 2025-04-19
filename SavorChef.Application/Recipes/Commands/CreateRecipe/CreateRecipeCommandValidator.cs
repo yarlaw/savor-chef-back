@@ -18,10 +18,10 @@ public class CreateRecipeCommandValidator : AbstractValidator<CreateRecipeComman
             .NotEmpty()
             .MaximumLength(4000);
 
-        RuleFor(x => x.PreparationTime)
+        RuleFor(x => x.PreparationTimeValue)
             .NotEmpty()
-            .Must(x => x.TotalMinutes > 0)
-            .WithMessage("Preparation time must be greater than 0 minutes");
+            .Must(x => x > 0)
+            .WithMessage("Preparation time value must be greater than 0 minutes");
 
         RuleFor(x => x.Difficulty)
             .IsInEnum();
