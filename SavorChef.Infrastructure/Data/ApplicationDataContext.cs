@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SavorChef.Infrastructure.Data;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDataContext
+public class ApplicationDataContext : IdentityDbContext<ApplicationUser>, IApplicationDataContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public ApplicationDataContext(DbContextOptions<ApplicationDataContext> options) : base(options) { }
 
     public DbSet<Recipe> Recipes => Set<Recipe>();
 

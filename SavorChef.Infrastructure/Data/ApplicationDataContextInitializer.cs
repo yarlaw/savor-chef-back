@@ -25,11 +25,11 @@ public static class InitializerExtensions
 public class ApplicationDataContextInitializer
 {
     private readonly ILogger<ApplicationDataContextInitializer> _logger;
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDataContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     // private readonly RoleManager<IdentityRole> _roleManager;
 
-    public ApplicationDataContextInitializer(ILogger<ApplicationDataContextInitializer> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public ApplicationDataContextInitializer(ILogger<ApplicationDataContextInitializer> logger, ApplicationDataContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _logger = logger;
         _context = context;

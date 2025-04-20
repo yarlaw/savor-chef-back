@@ -11,10 +11,6 @@ public class RecipeEntityConfiguration : IEntityTypeConfiguration<Recipe>
 {
     public void Configure(EntityTypeBuilder<Recipe> builder)
     {
-        // Configure the TimeSpan conversion (can't be done with annotations)
-        builder.Property(x => x.PreparationTime)
-            .HasConversion(x => x.ToString(), x => TimeSpan.Parse(x));
-
         // Configure the Enum to string conversion
         builder.Property(x => x.Difficulty)
             .HasConversion(new EnumToStringConverter<RecipeDifficulty>());

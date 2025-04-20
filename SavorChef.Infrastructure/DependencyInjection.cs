@@ -20,13 +20,13 @@ public static class DependencyInjection
         builder.Services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         builder.Services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
-        builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
+        builder.Services.AddDbContext<ApplicationDataContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
             options.UseNpgsql(connectionString);
         });
         
-        builder.Services.AddScoped<IApplicationDataContext>(provider => provider.GetRequiredService<IApplicationDataContext>());
+        builder.Services.AddScoped<IApplicationDataContext>(provider => provider.GetRequiredService<ApplicationDataContext>());
 
         builder.Services.AddScoped<ApplicationDataContextInitializer>();
         
@@ -38,7 +38,7 @@ public static class DependencyInjection
         builder.Services
             .AddIdentityCore<ApplicationUser>()
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddEntityFrameworkStores<ApplicationDataContext>()
             .AddApiEndpoints();
 
         builder.Services.AddSingleton(TimeProvider.System);
