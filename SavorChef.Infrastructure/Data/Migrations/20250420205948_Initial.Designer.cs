@@ -12,7 +12,7 @@ using SavorChef.Infrastructure.Data;
 namespace SavorChef.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
-    [Migration("20250420170229_Initial")]
+    [Migration("20250420205948_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

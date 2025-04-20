@@ -3,7 +3,7 @@ using SavorChef.Application.Models;
 
 namespace SavorChef.Infrastructure.Identity;
 
-public static class IdentityResultExtensions
+public static class SIdentityResultExtensions
 {
     public static Result ToApplicationResult(this IdentityResult result)
     {
