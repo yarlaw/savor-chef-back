@@ -11,6 +11,8 @@
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
 
       <PackageReference Include="Microsoft.AspNetCore.Identity.UI" />
+
+      <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
       
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />

@@ -1,9 +1,5 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 using SavorChef.Application.Common.Interfaces;
 using SavorChef.Application.Common.Models;
 using SavorChef.Application.Models;
@@ -15,17 +11,17 @@ public class IdentityService : IIdentityService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IAuthorizationService _authorizationService;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
-    private readonly JwtSettings _jwtSettings;
+    private readonly IJwtService _jwtService;
     public IdentityService(
         UserManager<ApplicationUser> userManager,
         IAuthorizationService authorizationService,
         IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-        JwtSettings jwtSettings)
+        IJwtService jwtService)
     {
         _userManager = userManager;
         _authorizationService = authorizationService;
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-        _jwtSettings = jwtSettings;
+        _jwtService = jwtService;
     }
     
     public async Task<(Result Result, JwtTokenResult? Tokens)> LoginAsync(string identifier,string password)
@@ -37,7 +33,7 @@ public class IdentityService : IIdentityService
             return (Result.Failure(new[] { "Invalid username or password." }), null);
         }
 
-        var tokens = GenerateTokenAsync(user);
+        var tokens = await _jwtService.GenerateTokenPairAsync(user.Id, user.Email!, user.UserName!);
         return (Result.Success(), tokens);
     }
     
@@ -55,60 +51,15 @@ public class IdentityService : IIdentityService
             return (result.ToApplicationResult(), null);
         }
 
-        var tokens = GenerateTokenAsync(user);
+        var tokens = await _jwtService.GenerateTokenPairAsync(user.Id, user.Email!, user.UserName!);
         return (Result.Success(), tokens);
     }
-    
     
     public async Task<string?> GetUserEmailAsync(string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
 
         return user?.Email;
-    }
-    
-    private JwtTokenResult GenerateTokenAsync(ApplicationUser user)
-    {
-        var now = DateTime.UtcNow;
-
-        var accessExpires = now.AddMinutes(15);
-        var refreshExpires = now.AddDays(_jwtSettings.ExpirationDays ?? 7);
-
-        var accessToken = GenerateJwtToken(user, accessExpires);
-        var refreshToken = GenerateJwtToken(user, refreshExpires);
-
-
-        return new JwtTokenResult
-        {
-            AccessToken = accessToken,
-            RefreshToken = refreshToken,
-            AccessTokenExpiresAt = accessExpires,
-            RefreshTokenExpiresAt = refreshExpires
-        };
-    }
-    
-    private string GenerateJwtToken(ApplicationUser user, DateTime expires)
-    {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName!),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        };
-
-        var token = new JwtSecurityToken(
-            issuer: _jwtSettings.Issuer,
-            audience: _jwtSettings.Audience,
-            claims: claims,
-            expires: expires,
-            signingCredentials: creds
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
     public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string email,  string password)

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SavorChef.Application.Common.Interfaces;
+using SavorChef.Application.Common.Models;
 using SavorChef.Infrastructure.Data;
 using SavorChef.Infrastructure.Data.Interceptors;
 using SavorChef.Infrastructure.Email;
@@ -38,6 +39,12 @@ public static class DependencyInjection
         builder.Services.AddScoped<IApplicationDataContext>(provider => provider.GetRequiredService<ApplicationDataContext>());
 
         builder.Services.AddScoped<ApplicationDataContextInitializer>();
+        
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = builder.Configuration.GetConnectionString("Valkey");
+            options.InstanceName = "SavorChef:";
+        });
         
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -71,7 +78,17 @@ public static class DependencyInjection
         
         // no email sender
         builder.Services.AddSingleton<IEmailSender<ApplicationUser>, NoOpEmailSender>();
+
+        builder.Services.AddScoped<IJwtService, JwtService>(provider => 
+            new JwtService(
+                provider.GetRequiredService<JwtSettings>(),
+                provider.GetRequiredService<UserManager<ApplicationUser>>(),
+                provider.GetRequiredService<TimeProvider>(),
+                provider.GetRequiredService<ITokenRepository>()
+            )
+        );
         
+        builder.Services.AddSingleton<ITokenRepository, TokenRepository>();
         builder.Services.AddSingleton(TimeProvider.System);
         builder.Services.AddTransient<IIdentityService, IdentityService>();
     }

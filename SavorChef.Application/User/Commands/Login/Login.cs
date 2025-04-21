@@ -1,12 +1,7 @@
-using System.Text.Json.Serialization;
-using Ardalis.GuardClauses;
 using SavorChef.Application.Common.Interfaces;
 using SavorChef.Application.Common.Models;
-using SavorChef.Application.Models;
-using SavorChef.Domain.Entities;
-using SavorChef.Domain.Enums;
 
-namespace SavorChef.Application.Recipes.Commands.CreateRecipe
+namespace SavorChef.Application.User.Commands.Login
 {
     public class LoginCommand : IRequest<JwtTokenResult>
     {

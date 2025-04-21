@@ -1,4 +1,4 @@
-namespace SavorChef.Infrastructure.Identity;
+namespace SavorChef.Application.Common.Models;
 
 public class JwtSettings
 {

@@ -1,10 +1,14 @@
-namespace SavorChef.Application.Recipes.Commands.CreateRecipe;
+namespace SavorChef.Application.User.Commands.Register;
 
-public class LoginCommandValidator : AbstractValidator<LoginCommand>
+public class LoginCommandValidator : AbstractValidator<RegisterCommand>
 {
     public LoginCommandValidator()
     {
-        RuleFor(v => v.Identifier)
+        RuleFor(v => v.Username).
+            NotEmpty()
+            .MaximumLength(256);
+        
+        RuleFor(v => v.Email)
             .NotEmpty()
             .MaximumLength(256);
 

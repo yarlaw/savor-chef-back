@@ -6,7 +6,7 @@ using SavorChef.Application.Models;
 using SavorChef.Domain.Entities;
 using SavorChef.Domain.Enums;
 
-namespace SavorChef.Application.Recipes.Commands.CreateRecipe
+namespace SavorChef.Application.User.Commands.Register
 {
     public class RegisterCommand : IRequest<JwtTokenResult>
     {
