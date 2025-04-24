@@ -13,17 +13,15 @@ public class JwtService : IJwtService
 {
     private readonly JwtSettings _jwtSettings;
     private readonly TimeProvider _timeProvider;
-    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ITokenRepository _tokenRepository;
 
     public JwtService(
-        JwtSettings jwtSettings, 
+        JwtSettings jwtSettings,
         UserManager<ApplicationUser> userManager,
         TimeProvider timeProvider,
         ITokenRepository tokenRepository)
     {
         _jwtSettings = jwtSettings;
-        _userManager = userManager;
         _timeProvider = timeProvider;
         _tokenRepository = tokenRepository;
     }
@@ -31,17 +29,19 @@ public class JwtService : IJwtService
     public async Task<JwtTokenResult> GenerateTokenPairAsync(string userId, string email, string username)
     {
         var now = _timeProvider.GetUtcNow().DateTime;
-        
+
         var accessTokenExpires = now.AddMinutes(15);
         var refreshTokenExpires = now.AddDays(_jwtSettings.ExpirationDays ?? 7);
 
         var accessToken = GenerateAccessToken(userId, email, username, accessTokenExpires);
         var refreshToken = GenerateRefreshToken();
-        
+
         // Store refresh token in repository
         await _tokenRepository.StoreRefreshTokenAsync(new RefreshToken
         {
             Token = refreshToken,
+            Email = email,
+            UserName = username,
             UserId = userId,
             CreatedAt = now,
             ExpiresAt = refreshTokenExpires,
@@ -60,35 +60,31 @@ public class JwtService : IJwtService
     public async Task<JwtTokenResult> RefreshTokenAsync(string refreshToken)
     {
         var storedToken = await _tokenRepository.GetRefreshTokenAsync(refreshToken);
-        
+
         if (storedToken == null || !storedToken.IsActive)
         {
             throw new SecurityTokenException("Invalid refresh token");
         }
 
-        string userId = storedToken.UserId;
-        var user = await _userManager.FindByIdAsync(userId);
-        
-        Guard.Against.Null(user, message: "User not found.");
-        
-        string email = user.Email!;
-        string username = user.UserName!;
-                     
+        var userId = storedToken.UserId;
+        var email = storedToken.Email!;
+        var username = storedToken.UserName!;
+
         await _tokenRepository.RevokeRefreshTokenAsync(refreshToken);
-        
+
         return await GenerateTokenPairAsync(userId, email, username);
     }
 
     public async Task RevokeAllUserTokensAsync(string userId)
     {
-        await RevokeAllUserTokensAsync(userId);
+        await _tokenRepository.RevokeAllUserTokensAsync(userId);
     }
 
     public async Task RevokeTokenAsync(string refreshToken)
     {
         await _tokenRepository.RevokeRefreshTokenAsync(refreshToken);
     }
-    
+
     private string GenerateAccessToken(string userId, string email, string username, DateTime expires)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
@@ -112,7 +108,7 @@ public class JwtService : IJwtService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    
+
     private string GenerateRefreshToken()
     {
         var randomNumber = new byte[64];
@@ -120,14 +116,14 @@ public class JwtService : IJwtService
         rng.GetBytes(randomNumber);
         return Convert.ToBase64String(randomNumber);
     }
-    
-    private  ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+
+    private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidateLifetime = false, // Don't validate lifetime here
+            ValidateLifetime = false,
             ValidateIssuerSigningKey = true,
             ValidIssuer = _jwtSettings.Issuer,
             ValidAudience = _jwtSettings.Audience,
@@ -135,13 +131,13 @@ public class JwtService : IJwtService
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        
+
         try
         {
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
-            
-            if (securityToken is not JwtSecurityToken jwtSecurityToken || 
-                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, 
+
+            if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                     StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new SecurityTokenException("Invalid token");

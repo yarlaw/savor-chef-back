@@ -79,14 +79,7 @@ public static class DependencyInjection
         // no email sender
         builder.Services.AddSingleton<IEmailSender<ApplicationUser>, NoOpEmailSender>();
 
-        builder.Services.AddScoped<IJwtService, JwtService>(provider => 
-            new JwtService(
-                provider.GetRequiredService<JwtSettings>(),
-                provider.GetRequiredService<UserManager<ApplicationUser>>(),
-                provider.GetRequiredService<TimeProvider>(),
-                provider.GetRequiredService<ITokenRepository>()
-            )
-        );
+        builder.Services.AddScoped<IJwtService, JwtService>();
         
         builder.Services.AddSingleton<ITokenRepository, TokenRepository>();
         builder.Services.AddSingleton(TimeProvider.System);
