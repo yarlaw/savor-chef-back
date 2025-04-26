@@ -15,7 +15,7 @@ public class Recipes: EndpointGroupBase
             .MapPost(CreateRecipe);
     }
 
-    private async Task<Created<int>> CreateRecipe(ISender sender, CreateRecipeCommand command, IUser user)
+    private async Task<Created<Guid>> CreateRecipe(ISender sender, CreateRecipeCommand command, IUser user)
     {
         command.CreatorId = user.Id!;
         

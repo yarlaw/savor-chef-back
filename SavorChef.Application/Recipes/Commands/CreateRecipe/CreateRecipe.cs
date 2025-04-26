@@ -5,7 +5,7 @@ using SavorChef.Domain.Enums;
 
 namespace SavorChef.Application.Recipes.Commands.CreateRecipe
 {
-    public class CreateRecipeCommand : IRequest<int>
+    public class CreateRecipeCommand : IRequest<Guid>
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
@@ -14,7 +14,7 @@ namespace SavorChef.Application.Recipes.Commands.CreateRecipe
     }
 
     // Handler for the ping command
-    public class CreateRecipeCommandHandler : IRequestHandler<CreateRecipeCommand, int>
+    public class CreateRecipeCommandHandler : IRequestHandler<CreateRecipeCommand, Guid>
     {
         private readonly IApplicationDataContext _context;
         
@@ -22,7 +22,7 @@ namespace SavorChef.Application.Recipes.Commands.CreateRecipe
         {
             _context = context;
         }   
-        public async Task<int> Handle(CreateRecipeCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateRecipeCommand request, CancellationToken cancellationToken)
         {  
             var recipe = new Recipe
             {
