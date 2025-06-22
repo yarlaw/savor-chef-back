@@ -1,0 +1,88 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: savor-chef-postgres
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: yarlaw
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - savor-chef-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U yarlaw -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: savor-chef-minio
+    environment:
+      MINIO_ROOT_USER: yarlaw
+      MINIO_ROOT_PASSWORD: password
+    ports:
+      - "9000:9000"
+      - "9001:9001" # MinIO Console (web UI)
+    volumes:
+      - minio_data:/data
+    networks:
+      - savor-chef-network
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio-createbucket:
+    image: minio/mc:latest
+    container_name: savor-chef-minio-setup
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - savor-chef-network
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 yarlaw password;
+      /usr/bin/mc mb myminio/savor-chef --ignore-existing;
+      /usr/bin/mc policy set public myminio/savor-chef;
+      exit 0;
+      "
+
+  valkey:
+    image: valkey/valkey:7-alpine
+    container_name: savor-chef-valkey
+    ports:
+      - "6379:6379"
+    volumes:
+      - valkey_data:/data
+    networks:
+      - savor-chef-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local
+  minio_data:
+    driver: local
+  valkey_data:
+    driver: local
+
+networks:
+  savor-chef-network:
+    driver: bridge

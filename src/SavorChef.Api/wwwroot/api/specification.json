@@ -7,6 +7,29 @@
   },
   "paths": {
     "/api/Recipes": {
+      "get": {
+        "tags": [
+          "Recipes"
+        ],
+        "operationId": "GetRecipes",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipesVm"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
       "post": {
         "tags": [
           "Recipes"
@@ -30,8 +53,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "type": "string",
+                  "format": "guid"
                 }
               }
             }
@@ -184,6 +207,54 @@
   },
   "components": {
     "schemas": {
+      "RecipesVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "recipes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecipeDto"
+            }
+          }
+        }
+      },
+      "RecipeDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "creatorId": {
+            "type": "string"
+          },
+          "difficulty": {
+            "$ref": "#/components/schemas/RecipeDifficulty"
+          }
+        }
+      },
+      "RecipeDifficulty": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Easy",
+          "Medium",
+          "Hard"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
       "CreateRecipeCommand": {
         "type": "object",
         "additionalProperties": false,
