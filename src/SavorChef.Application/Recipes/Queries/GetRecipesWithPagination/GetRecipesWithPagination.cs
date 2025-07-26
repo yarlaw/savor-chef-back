@@ -1,7 +1,8 @@
 using SavorChef.Application.Common.Interfaces;
 using SavorChef.Application.Models;
-using Microsoft.Extensions.DependencyInjection.Recipes.Queries.GetRecipes;
 using SavorChef.Domain.Enums;
+using SavorChef.Application.Recipes.DTOs;
+using SavorChef.Application.Common.Mappings;
 
 namespace SavorChef.Application.Recipes.Queries.GetRecipesWithPagination;
 

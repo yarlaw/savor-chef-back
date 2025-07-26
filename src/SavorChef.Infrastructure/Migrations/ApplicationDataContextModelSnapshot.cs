@@ -8,7 +8,7 @@ using SavorChef.Infrastructure.Data;
 
 #nullable disable
 
-namespace SavorChef.Infrastructure.Data.Migrations
+namespace SavorChef.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
     partial class ApplicationDataContextModelSnapshot : ModelSnapshot
@@ -156,11 +156,9 @@ namespace SavorChef.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("SavorChef.Domain.Entities.Recipe", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("timestamp with time zone");

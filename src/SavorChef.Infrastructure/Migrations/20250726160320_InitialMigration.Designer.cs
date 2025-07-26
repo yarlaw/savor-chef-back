@@ -9,11 +9,11 @@ using SavorChef.Infrastructure.Data;
 
 #nullable disable
 
-namespace SavorChef.Infrastructure.Data.Migrations
+namespace SavorChef.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDataContext))]
-    [Migration("20250420205948_Initial")]
-    partial class Initial
+    [Migration("20250726160320_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -159,11 +159,9 @@ namespace SavorChef.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("SavorChef.Domain.Entities.Recipe", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("timestamp with time zone");

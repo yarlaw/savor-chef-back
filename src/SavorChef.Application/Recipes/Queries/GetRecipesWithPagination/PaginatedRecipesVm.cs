@@ -1,12 +1,11 @@
 using SavorChef.Application.Models;
-using Microsoft.Extensions.DependencyInjection.Recipes.Queries.GetRecipes;
-using System.Linq;
+using SavorChef.Application.Recipes.DTOs;
 
 namespace SavorChef.Application.Recipes.Queries.GetRecipesWithPagination;
 
 public class PaginatedRecipesVm
 {
-    public IReadOnlyCollection<RecipeDto> Items { get; init; } = Array.Empty<RecipeDto>();
+    public IReadOnlyCollection<RecipeDto> Recipes { get; init; } = Array.Empty<RecipeDto>();
     public int PageNumber { get; init; }
     public int TotalPages { get; init; }
     public int TotalCount { get; init; }
@@ -17,23 +16,12 @@ public class PaginatedRecipesVm
     {
         return new PaginatedRecipesVm
         {
-            Items = list.Items,
+            Recipes = list.Items,
             PageNumber = list.PageNumber,
             TotalPages = list.TotalPages,
             TotalCount = list.TotalCount,
             HasPreviousPage = list.HasPreviousPage,
             HasNextPage = list.HasNextPage
-        };
-    }
-
-    /// <summary>
-    /// Converts this paginated result to the legacy RecipesVm format for backward compatibility
-    /// </summary>
-    public RecipesVm ToLegacyVm()
-    {
-        return new RecipesVm
-        {
-            Recipes = Items.ToList()
         };
     }
 }

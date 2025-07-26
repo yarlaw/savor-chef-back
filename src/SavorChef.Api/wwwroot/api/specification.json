@@ -6,19 +6,72 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/Recipes": {
+    "/recipes": {
       "get": {
         "tags": [
           "Recipes"
         ],
+        "description": "Get a paginated list of recipes with optional filtering",
         "operationId": "GetRecipes",
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10,
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "difficulty",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            },
+            "x-position": 4
+          },
+          {
+            "name": "creatorId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 5
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RecipesVm"
+                  "$ref": "#/components/schemas/PaginatedRecipesVm"
                 }
               }
             }
@@ -31,10 +84,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Recipes"
-        ],
-        "operationId": "CreateRecipe",
+        "operationId": "PostRecipes",
         "requestBody": {
           "x-name": "command",
           "content": {
@@ -207,7 +257,7 @@
   },
   "components": {
     "schemas": {
-      "RecipesVm": {
+      "PaginatedRecipesVm": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -216,6 +266,24 @@
             "items": {
               "$ref": "#/components/schemas/RecipeDto"
             }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
           }
         }
       },
